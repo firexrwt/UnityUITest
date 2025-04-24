@@ -34,7 +34,6 @@ RectTransform:
   m_Children:
   - {fileID: 8518598044926454633}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -247,6 +246,10 @@ PrefabInstance:
       propertyPath: m_VerticalAlignment
       value: 512
       objectReference: {fileID: 0}
+    - target: {fileID: 7464606045538642902, guid: 9e4f96ddbc5a6a146b600b7724201831, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 8748084088195779940, guid: 9e4f96ddbc5a6a146b600b7724201831, type: 3}
       propertyPath: m_Type
       value: 1
@@ -308,8 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simpleTooltipStyle: {fileID: 11400000, guid: b60656fad1664684d8fb0085c2c6ccbb, type: 2}
-  infoLeft: "\u041D\u0430\u0436\u0430\u0442\u0438\u0435 \u043D\u0430 \u043A\u043D\u043E\u043F\u043A\u0443
-    \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442 \u043E\u043A\u043D\u043E
+  infoLeft: "\u041E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442 \u043E\u043A\u043D\u043E
     \u0441 \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435\u043C \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438"
   infoRight: 
 --- !u!224 &8518598044926454633 stripped

@@ -14,12 +14,12 @@ public class STController : MonoBehaviour
     private RectTransform rect;
     private int showInFrames = -1;
     private bool showNow = false;
-    
+
     private void Awake()
     {
         // Load up both text layers
         var tmps = GetComponentsInChildren<TextMeshProUGUI>();
-        for(int i = 0; i < tmps.Length; i++)
+        for (int i = 0; i < tmps.Length; i++)
         {
             if (tmps[i].name == "_left")
                 toolTipTextLeft = tmps[i];
@@ -31,6 +31,13 @@ public class STController : MonoBehaviour
         // Keep a reference for the panel image and transform
         panel = GetComponent<Image>();
         rect = GetComponent<RectTransform>();
+
+        // Configure text settings to avoid word wrapping
+        if (toolTipTextLeft != null)
+            toolTipTextLeft.enableWordWrapping = false;
+
+        if (toolTipTextRight != null)
+            toolTipTextRight.enableWordWrapping = false;
 
         // Hide at the start
         HideTooltip();
@@ -68,7 +75,38 @@ public class STController : MonoBehaviour
 
         if (showNow)
         {
-            rect.anchoredPosition = Input.mousePosition;
+            // Get mouse position and tooltip dimensions
+            Vector2 mousePosition = Input.mousePosition;
+            Vector2 size = rect.sizeDelta;
+
+            // Calculate screen boundaries
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+
+            // Adjust position to keep tooltip on screen
+            // Calculate the actual tooltip width/height considering scale
+            float tooltipWidth = size.x * rect.localScale.x;
+            float tooltipHeight = size.y * rect.localScale.y;
+
+            // Check right edge
+            if (mousePosition.x + tooltipWidth > screenWidth)
+            {
+                mousePosition.x = screenWidth - tooltipWidth;
+            }
+
+            // Check top edge
+            if (mousePosition.y + tooltipHeight > screenHeight)
+            {
+                mousePosition.y = screenHeight - tooltipHeight;
+            }
+
+            // Check bottom edge
+            if (mousePosition.y - tooltipHeight < 0)
+            {
+                mousePosition.y = tooltipHeight;
+            }
+
+            rect.position = mousePosition;
         }
 
         showInFrames -= 1;
@@ -77,7 +115,7 @@ public class STController : MonoBehaviour
     public void SetRawText(string text, TextAlign align = TextAlign.Left)
     {
         // Doesn't change style, just the text
-        if(align == TextAlign.Left)
+        if (align == TextAlign.Left)
             toolTipTextLeft.text = text;
         if (align == TextAlign.Right)
             toolTipTextRight.text = text;
@@ -98,7 +136,7 @@ public class STController : MonoBehaviour
 
         // Convert all tags to TMPro markup
         var styles = style.fontStyles;
-        for(int i = 0; i < styles.Length; i++)
+        for (int i = 0; i < styles.Length; i++)
         {
             string addTags = "</b></i></u></s>";
             addTags += "<color=#" + ColorToHex(styles[i].color) + ">";
@@ -129,12 +167,28 @@ public class STController : MonoBehaviour
         // after that the frame count wont matter
         if (showInFrames == -1)
             showInFrames = 2;
+
+        // Make tooltip visible
+        panel.enabled = true;
+        if (toolTipTextLeft != null)
+            toolTipTextLeft.enabled = true;
+        if (toolTipTextRight != null)
+            toolTipTextRight.enabled = true;
     }
 
     public void HideTooltip()
     {
         showInFrames = -1;
         showNow = false;
-        rect.anchoredPosition = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+
+        // Move offscreen as a backup
+        rect.anchoredPosition = new Vector2(Screen.width * 2, Screen.height * 2);
+
+        // Actually hide the tooltip components
+        panel.enabled = false;
+        if (toolTipTextLeft != null)
+            toolTipTextLeft.enabled = false;
+        if (toolTipTextRight != null)
+            toolTipTextRight.enabled = false;
     }
 }
